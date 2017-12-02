@@ -2,11 +2,14 @@ export class Board {
     constructor(numberOfRows, numberOfColumns, numberOfBombs){
         this._numberOfBombs = numberOfBombs;
         this._numberOfTiles = numberOfRows * numberOfColumns;
+        //TODO: Add validation for board dimensions and bomb number.
         this._playerBoard = Board.generatePlayerBoard(numberOfRows, numberOfColumns);
         this._bombBoard = Board.generateBombBoard(numberOfRows, numberOfColumns, numberOfBombs);
     }
 
     get playerBoard () { return this._playerBoard; }
+
+    //TODO: Add flagTile method
 
     flipTile(rowIndex, columnIndex) {
         if(this._playerBoard[rowIndex][columnIndex] !== ' ') {
