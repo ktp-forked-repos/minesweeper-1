@@ -1,3 +1,6 @@
+//TODO: Cleanup the file
+
+
 export class Board {
     constructor(numberOfRows, numberOfColumns, numberOfBombs){
         this._numberOfBombs = numberOfBombs;
@@ -5,6 +8,7 @@ export class Board {
         //TODO: Add validation for board dimensions and bomb number.
         this._playerBoard = Board.generatePlayerBoard(numberOfRows, numberOfColumns);
         this._bombBoard = Board.generateBombBoard(numberOfRows, numberOfColumns, numberOfBombs);
+        this.neighborOffsets = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
     }
 
     get playerBoard () { return this._playerBoard; }
@@ -12,24 +16,30 @@ export class Board {
     //TODO: Add flagTile method
 
     flipTile(rowIndex, columnIndex) {
-        if(this._playerBoard[rowIndex][columnIndex] !== ' ') {
-            console.log('This tile has already been flipped!');
-        } else if (this._bombBoard[rowIndex][columnIndex] === 'B') {
+        if (this._bombBoard[rowIndex][columnIndex] === 'B') {
             this._playerBoard[rowIndex][columnIndex] = 'B';
-
-        } else {
+        } else if(this._playerBoard[rowIndex][columnIndex] === ' ') {
             this._playerBoard[rowIndex][columnIndex] = this.getNumberOfNeighborBombs(rowIndex, columnIndex);
-            //TODO: Check if getNumberOfNeighborBombs returned  0. If yes - flip all the neighbors.
+            if ( this._playerBoard[rowIndex][columnIndex] === 0) {
+                this.neighborOffsets.forEach(offset => {
+                    const neighborRowIndex = rowIndex + offset[0];
+                    const neighborColumnIndex = columnIndex + offset[1];
+                    if(neighborRowIndex >= 0 && neighborRowIndex < this._bombBoard.length && neighborColumnIndex >= 0 && neighborColumnIndex < this._bombBoard[0].length) {
+                        this.flipTile(neighborRowIndex, neighborColumnIndex);
+                    }
+                });
+            }
+        } else {
+            return;
         }
         this._numberOfTiles--;
     }
 
     getNumberOfNeighborBombs (rowIndex, columnIndex) {
-        const neighborOffsets = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
         const numberOfRows = this._bombBoard.length;
         const numberOfColumns = this._bombBoard[0].length;
         let numberOfBombs = 0;
-        neighborOffsets.forEach(offset => {
+        this.neighborOffsets.forEach(offset => {
             const neighborRowIndex = rowIndex + offset[0];
             const neighborColumnIndex = columnIndex + offset[1];
             if(neighborRowIndex >= 0 && neighborRowIndex < numberOfRows && neighborColumnIndex >= 0 && neighborColumnIndex < numberOfColumns) {

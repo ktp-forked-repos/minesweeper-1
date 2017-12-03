@@ -32,3 +32,6 @@ class Game {
         }
     }
 }
+
+//Game setup for command line
+let game = new Game(10,10,10);
