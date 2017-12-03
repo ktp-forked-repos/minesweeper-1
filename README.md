@@ -5,7 +5,6 @@ I will refactor this and add some new features soon, so this will become a prope
 
 # How to run this:
 Transpile src folder to ES5 files. Run node and load game.js.
-Setup babel with
 Rest of the "how-tos" is placed in game.js
 
 # Run config for WebStorm
